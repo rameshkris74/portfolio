@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Name — Web Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green: #1D9E75;
+      --green-light: #E1F5EE;
+      --dark: #0f0f0f;
+      --mid: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(15,15,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 20px;
+      color: #fff; letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--green); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; font-size: 14px;
+      color: var(--muted); font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .bar { width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s; display: block; }
+    .hamburger.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open .bar:nth-child(2) { opacity: 0; }
+    .hamburger.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; flex-direction: column;
+      position: fixed; top: 65px; left: 0; right: 0;
+      background: var(--mid);
+      border-bottom: 1px solid var(--border);
+      z-index: 99; padding: 0.5rem 0;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none; font-size: 15px; font-weight: 500;
+      color: var(--muted); padding: 1rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+    .mobile-menu a:hover { color: #fff; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 2.5rem 4rem;
+      max-width: 900px; margin: 0 auto;
+    }
+
+    .hero-content { max-width: 680px; }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px; font-weight: 500;
+      color: var(--green);
+      background: rgba(29,158,117,0.1);
+      border: 1px solid rgba(29,158,117,0.25);
+      padding: 5px 14px; border-radius: 20px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 .highlight {
+      color: var(--green);
+      position: relative;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .btn {
+      text-decoration: none; font-size: 14px; font-weight: 500;
+      padding: 12px 24px; border-radius: 8px;
+      transition: all 0.2s; cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--green); color: #fff; border: 1px solid var(--green);
+    }
+    .btn-primary:hover { background: #179060; }
+    .btn-outline {
+      background: transparent; color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.5); }
+
+    /* SECTIONS */
+    section { padding: 5rem 2.5rem; max-width: 900px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--green); text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700; color: #fff;
+      margin-bottom: 2.5rem; letter-spacing: -0.5px;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .skill-card {
+      background: var(--mid);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { border-color: var(--green); transform: translateY(-3px); }
+    .skill-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .skill-name { font-size: 13px; font-weight: 500; color: var(--text); }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--mid);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .project-card:hover { border-color: var(--green); transform: translateY(-4px); }
+
+    .project-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px; font-weight: 700;
+      color: var(--green); margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: #fff; margin-bottom: 8px;
+    }
+    .project-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .tech-tag {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 10px; border-radius: 20px;
+      background: rgba(29,158,117,0.1);
+      color: var(--green);
+      border: 1px solid rgba(29,158,117,0.2);
+    }
+
+    .project-link {
+      text-decoration: none; font-size: 13px; font-weight: 500;
+      color: var(--muted); transition: color 0.2s;
+    }
+    .project-link:hover { color: var(--green); }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .about-text { font-size: 15px; color: var(--muted); line-height: 1.9; }
+    .about-text p { margin-bottom: 1rem; }
+
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .stat-card {
+      background: var(--mid);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.2rem;
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem; font-weight: 800;
+      color: var(--green); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); }
+
+    /* CONTACT */
+    .contact-box {
+      background: var(--mid);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem; font-weight: 700;
+      color: #fff; margin-bottom: 0.75rem;
+    }
+    .contact-box p { color: var(--muted); margin-bottom: 2rem; font-size: 15px; }
+
+    .contact-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .contact-link {
+      text-decoration: none; font-size: 13px; font-weight: 500;
+      padding: 10px 20px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--text); transition: all 0.2s;
+    }
+    .contact-link:hover { border-color: var(--green); color: var(--green); }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--muted);
+    }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0 2.5rem; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content > * {
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+      section { padding: 3.5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-box { padding: 2rem 1.5rem; }
+      .divider { margin: 0 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Your<span>Name</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="burger" onclick="toggleMenu()">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#skills" onclick="closeMenu()">Skills</a>
+    <a href="#projects" onclick="closeMenu()">Projects</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="badge">Available for work — Chennai, India</div>
+      <h1>Hi, I'm <span class="highlight">Your Name</span><br>Web Developer</h1>
+      <p>I build clean, responsive websites using HTML, CSS, and JavaScript. Currently learning React and looking for my first web development role.</p>
+      <div class="btn-row">
+        <a href="#projects" class="btn btn-primary">View my projects</a>
+        <a href="#contact" class="btn btn-outline">Get in touch</a>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">About me</p>
+    <h2 class="section-title">Who I am</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a self-taught web developer from Chennai, passionate about building things for the web. I started learning HTML and CSS and quickly fell in love with turning designs into real, working websites.</p>
+        <p>I spend my time building projects, learning JavaScript, and improving my skills every day. I'm actively looking for internship or fresher opportunities where I can grow and contribute.</p>
+        <p>When I'm not coding, I enjoy exploring new technologies and working on personal projects to sharpen my skills.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Projects built</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">6mo</div>
+          <div class="stat-label">Learning journey</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Self-taught</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Eager to learn</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label">What I know</p>
+    <h2 class="section-title">My skills</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-name">HTML5</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🎨</div>
+        <div class="skill-name">CSS3</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">⚡</div>
+        <div class="skill-name">JavaScript</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">📱</div>
+        <div class="skill-name">Responsive Design</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🐙</div>
+        <div class="skill-name">Git & GitHub</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">⚛️</div>
+        <div class="skill-name">React (learning)</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label">What I've built</p>
+    <h2 class="section-title">My projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-num">PROJECT 01</div>
+        <div class="project-title">Portfolio Website</div>
+        <div class="project-desc">A personal portfolio site to showcase my skills and projects. Fully responsive with a mobile hamburger menu and smooth scroll navigation.</div>
+        <div class="tech-tags">
+          <span class="tech-tag">HTML</span>
+          <span class="tech-tag">CSS</span>
+          <span class="tech-tag">JavaScript</span>
+        </div>
+        <a href="https://github.com/yourusername/portfolio" class="project-link" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">PROJECT 02</div>
+        <div class="project-title">Weather App</div>
+        <div class="project-desc">Fetches live weather data using the OpenWeatherMap API. Search any city and see temperature, humidity, and conditions in real time.</div>
+        <div class="tech-tags">
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">API</span>
+          <span class="tech-tag">CSS</span>
+        </div>
+        <a href="https://github.com/yourusername/weather-app" class="project-link" target="_blank">View on GitHub →</a>
+      </div>
+
+      <div class="project-card">
+        <div class="project-num">PROJECT 03</div>
+        <div class="project-title">To-Do App</div>
+        <div class="project-desc">A clean task manager with add, complete, and delete features. Uses localStorage so your tasks are saved even after closing the browser.</div>
+        <div class="tech-tags">
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">localStorage</span>
+          <span class="tech-tag">CSS</span>
+        </div>
+        <a href="https://github.com/yourusername/todo-app" class="project-link" target="_blank">View on GitHub →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-box">
+      <h3>Let's work together</h3>
+      <p>I'm currently looking for internship or fresher web developer roles. Feel free to reach out!</p>
+      <div class="contact-links">
+        <a href="mailto:your@email.com" class="contact-link">your@email.com</a>
+        <a href="https://github.com/yourusername" class="contact-link" target="_blank">GitHub</a>
+        <a href="https://linkedin.com/in/yourusername" class="contact-link" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by Your Name — 2025</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const burger = document.getElementById('burger');
+      const menu = document.getElementById('mobileMenu');
+      burger.classList.toggle('open');
+      menu.classList.toggle('open');
+    }
+
+    function closeMenu() {
+      document.getElementById('burger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+  </script>
+
+</body>
+</html>
