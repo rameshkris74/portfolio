@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramesh Krishnan S — Frontend Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0D1117;
+  --bg-raised: #131B26;
+  --bg-card: #161E2B;
+  --border: #232C3B;
+  --text: #E6E6E6;
+  --text-dim: #8B949E;
+  --accent: #2DD4BF;
+  --accent-dim: #1A9C8B;
+  --accent-soft: rgba(45, 212, 191, 0.12);
+  --warn: #F2C572;
+  --mono: "JetBrains Mono", monospace;
+  --sans: "Inter", sans-serif;
+  --max: 1080px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--accent-soft); color: var(--accent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- NAV ---------- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(13, 17, 23, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+.brand .dot { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.nav-links a:hover { color: var(--accent); }
+
+.nav-cta {
+  font-family: var(--mono);
+  font-size: 14px;
+  border: 1px solid var(--accent-dim);
+  color: var(--accent);
+  padding: 7px 16px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+.nav-cta:hover { background: var(--accent-soft); }
+
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 72px 28px 60px;
+}
+
+.hero-inner { max-width: 720px; }
+
+.terminal {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 40px;
+  box-shadow: 0 24px 60px -20px rgba(0,0,0,0.6);
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #0B0F15;
+  border-bottom: 1px solid var(--border);
+}
+.tdot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.tdot.red { background: #FF5F56; }
+.tdot.yellow { background: #FFBD2E; }
+.tdot.green { background: #27C93F; }
+.terminal-title {
+  margin-left: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.terminal-body {
+  padding: 20px 18px;
+  font-family: var(--mono);
+  font-size: 14.5px;
+}
+.terminal-body .line { color: var(--text-dim); margin-bottom: 4px; }
+.terminal-body .prompt { color: var(--accent); margin-right: 8px; }
+.terminal-body .output {
+  color: var(--text);
+  margin: 4px 0 10px 0;
+  min-height: 1.4em;
+}
+.cursor-block {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.hero-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(34px, 6vw, 56px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin-bottom: 22px;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 17px;
+  color: var(--text-dim);
+  max-width: 520px;
+  margin-bottom: 32px;
+}
+
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 13px 24px;
+  border-radius: 7px;
+  display: inline-block;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  background: var(--accent);
+  color: #06201C;
+}
+.btn-primary:hover { background: #4EE2CE; }
+.btn-ghost {
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-ghost:hover { border-color: var(--accent-dim); color: var(--accent); }
+.btn-full { width: 100%; text-align: center; border: none; cursor: pointer; }
+
+.hero-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 56px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+.hero-tags span {
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* ---------- SECTION HEAD (shared) ---------- */
+.section-head { max-width: var(--max); margin: 0 auto; padding: 0 28px; margin-bottom: 36px; }
+.eyebrow {
+  display: block;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.section-head h2 {
+  font-family: var(--mono);
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+section { padding: 88px 0 0; }
+section:last-of-type { padding-bottom: 0; }
+
+/* ---------- ABOUT ---------- */
+.about-grid {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.about-text { font-size: 17px; color: var(--text-dim); }
+.about-facts { display: flex; flex-direction: column; gap: 22px; }
+.fact {
+  border-left: 2px solid var(--accent-dim);
+  padding-left: 16px;
+}
+.fact-num {
+  display: block;
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.fact-label { font-size: 13px; color: var(--text-dim); }
+
+@media (max-width: 760px) {
+  .about-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- SKILLS ---------- */
+.skills-grid {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.skill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.skill-card:hover {
+  border-color: var(--accent-dim);
+  transform: translateY(-2px);
+}
+.skill-tag {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.skill-card h3 { font-size: 17px; margin-bottom: 8px; }
+.skill-card p { font-size: 14px; color: var(--text-dim); }
+
+@media (max-width: 860px) {
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- PROJECTS ---------- */
+.project {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.project-tag {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.project-info h3 { font-size: 26px; margin: 10px 0 14px; }
+.project-info p { color: var(--text-dim); font-size: 15.5px; margin-bottom: 20px; }
+.project-stack { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; }
+.project-stack li {
+  font-family: var(--mono);
+  font-size: 12px;
+  border: 1px solid var(--border);
+  padding: 5px 11px;
+  border-radius: 20px;
+  color: var(--text-dim);
+}
+
+.visual-window {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px -25px rgba(0,0,0,0.65);
+}
+.visual-bar {
+  display: flex;
+  gap: 7px;
+  padding: 12px 14px;
+  background: #0B0F15;
+  border-bottom: 1px solid var(--border);
+}
+.visual-bar span { width: 9px; height: 9px; border-radius: 50%; background: #2A3344; }
+.visual-code {
+  padding: 24px 20px;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.9;
+}
+.visual-code .c-key { color: #FF7B72; }
+.visual-code .c-fn { color: #D2A8FF; }
+.visual-code .c-str { color: var(--accent); }
+
+@media (max-width: 760px) {
+  .project { grid-template-columns: 1fr; }
+  .project-visual { order: -1; }
+}
+
+/* ---------- CONTACT ---------- */
+.contact-inner {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 0 28px;
+  text-align: center;
+}
+.contact-inner h2 { margin: 12px 0 10px; }
+.contact-inner > p.eyebrow + h2 { margin-top: 0; }
+.contact-inner p { color: var(--text-dim); margin-bottom: 36px; }
+
+.contact-form {
+  text-align: left;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.field { display: flex; flex-direction: column; gap: 6px; position: relative; }
+.field label {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+.field input, .field textarea {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 11px 13px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14.5px;
+  resize: vertical;
+}
+.field input:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--accent-dim);
+}
+.field.has-error input, .field.has-error textarea { border-color: #F2545B; }
+.field-error {
+  font-size: 12.5px;
+  color: #F2868B;
+  min-height: 1em;
+}
+.form-status {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  text-align: center;
+  min-height: 1.4em;
+  color: var(--accent);
+}
+
+.contact-direct {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  color: var(--text-dim);
+}
+.contact-direct a:hover { color: var(--accent); }
+
+/* ---------- FOOTER ---------- */
+.footer {
+  text-align: center;
+  padding: 36px 28px 48px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">ramesh<span class="dot">.</span>dev</a>
+    <nav class="nav-links">
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <a href="#contact" class="nav-cta">say hello</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="tdot red"></span><span class="tdot yellow"></span><span class="tdot green"></span>
+          <span class="terminal-title">ramesh@portfolio:~</span>
+        </div>
+        <div class="terminal-body">
+          <p class="line"><span class="prompt">$</span> whoami</p>
+          <p class="output type-target" id="typeline"></p>
+          <p class="line"><span class="prompt">$</span> <span class="cursor-block">&nbsp;</span></p>
+        </div>
+      </div>
+
+      <h1 class="hero-title">
+        Building interfaces<br>
+        that feel <em>obvious</em><br>
+        to use.
+      </h1>
+      <p class="hero-sub">
+        Frontend Web Developer from Madurai, focused on clean HTML5, CSS3 and React
+        interfaces that hold up across every browser and every screen size.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">View projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+    <div class="hero-tags" aria-hidden="true">
+      <span>&lt;html&gt;</span><span>.flex</span><span>const</span><span>=&gt;</span><span>npm run dev</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-head">
+      <span class="eyebrow">01 / about</span>
+      <h2>A fresher who ships, not just studies.</h2>
+    </div>
+    <div class="about-grid">
+      <p class="about-text">
+        I'm a Frontend Web Developer with a BCA from Madurai Kamaraj University.
+        I build responsive, accessible, cross&#8209;browser interfaces with HTML5, CSS3,
+        JavaScript (ES6+) and React &mdash; and I test every layout in Chrome, Firefox and
+        Safari before I call it done. I care about the small details: load time,
+        keyboard focus, and whether a button actually feels right to click.
+      </p>
+      <div class="about-facts">
+        <div class="fact">
+          <span class="fact-num">2024</span>
+          <span class="fact-label">BCA graduate</span>
+        </div>
+        <div class="fact">
+          <span class="fact-num">3+</span>
+          <span class="fact-label">browsers tested per build</span>
+        </div>
+        <div class="fact">
+          <span class="fact-num">100%</span>
+          <span class="fact-label">mobile-first layouts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="skills" id="skills">
+    <div class="section-head">
+      <span class="eyebrow">02 / stack</span>
+      <h2>What I build with.</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <span class="skill-tag">markup</span>
+        <h3>HTML5</h3>
+        <p>Semantic, accessible structure as the foundation of every page.</p>
+      </div>
+      <div class="skill-card">
+        <span class="skill-tag">styling</span>
+        <h3>CSS3</h3>
+        <p>Responsive layouts, Flexbox/Grid, and mobile-first design systems.</p>
+      </div>
+      <div class="skill-card">
+        <span class="skill-tag">behavior</span>
+        <h3>JavaScript (ES6+)</h3>
+        <p>Interactive UI, form validation, and clean, maintainable logic.</p>
+      </div>
+      <div class="skill-card">
+        <span class="skill-tag">framework</span>
+        <h3>React</h3>
+        <p>Component-driven UIs built for reuse and easy scaling.</p>
+      </div>
+      <div class="skill-card">
+        <span class="skill-tag">workflow</span>
+        <h3>Git &amp; GitHub</h3>
+        <p>Version control and deployment for every project I ship.</p>
+      </div>
+      <div class="skill-card">
+        <span class="skill-tag">QA</span>
+        <h3>Cross-browser testing</h3>
+        <p>Chrome, Firefox &amp; Safari checked before anything goes live.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects" id="projects">
+    <div class="section-head">
+      <span class="eyebrow">03 / projects</span>
+      <h2>Selected work.</h2>
+    </div>
+
+    <article class="project">
+      <div class="project-info">
+        <span class="project-tag">personal site</span>
+        <h3>Personal Portfolio Website</h3>
+        <p>
+          This site &mdash; designed and built from scratch with HTML5, CSS3 and
+          JavaScript. Mobile-first layout, smooth in-page navigation, and a working,
+          validated contact form. Deployed on GitHub Pages and tested across Chrome,
+          Firefox and Safari for consistent rendering and fast load times.
+        </p>
+        <ul class="project-stack">
+          <li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>GitHub Pages</li>
+        </ul>
+      </div>
+      <div class="project-visual" aria-hidden="true">
+        <div class="visual-window">
+          <div class="visual-bar"><span></span><span></span><span></span></div>
+          <div class="visual-code">
+            <p><span class="c-key">function</span> <span class="c-fn">renderHero</span>() {</p>
+            <p>&nbsp;&nbsp;<span class="c-key">return</span> <span class="c-str">"Welcome ✨"</span>;</p>
+            <p>}</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <span class="eyebrow">04 / contact</span>
+      <h2>Let's build something.</h2>
+      <p>Open to internships, fresher roles, and freelance web development work.</p>
+
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required>
+          <span class="field-error" id="nameError"></span>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          <span class="field-error" id="emailError"></span>
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" placeholder="Tell me about the role or project..." required></textarea>
+          <span class="field-error" id="messageError"></span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Send message</button>
+        <p class="form-status" id="formStatus" role="status"></p>
+      </form>
+
+      <div class="contact-direct">
+        <a href="mailto:rameshkrisrameshkris@gmail.com">rameshkrisrameshkris@gmail.com</a>
+        <span>+91 97918 35617</span>
+        <span>Madurai, Tamil Nadu</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> Ramesh Krishnan S. Built with HTML, CSS &amp; JavaScript.</p>
+</footer>
+
+<script>
+// ---------- Footer year ----------
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// ---------- Terminal typing effect ----------
+const typeTarget = document.getElementById("typeline");
+const fullText = "Ramesh Krishnan S — Frontend Web Developer";
+let charIndex = 0;
+
+function typeChar() {
+  if (charIndex <= fullText.length) {
+    typeTarget.textContent = fullText.slice(0, charIndex);
+    charIndex++;
+    setTimeout(typeChar, 45);
+  }
+}
+
+// Respect reduced motion preference
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (prefersReducedMotion) {
+  typeTarget.textContent = fullText;
+} else {
+  typeChar();
+}
+
+// ---------- Scroll-reveal for sections ----------
+const revealEls = document.querySelectorAll(".skill-card, .project, .about-grid, .fact");
+revealEls.forEach((el) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(16px)";
+  el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+});
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.15 }
+);
+
+if (!prefersReducedMotion) {
+  revealEls.forEach((el) => observer.observe(el));
+} else {
+  revealEls.forEach((el) => {
+    el.style.opacity = "1";
+    el.style.transform = "none";
+  });
+}
+
+// ---------- Contact form validation ----------
+const form = document.getElementById("contactForm");
+const status = document.getElementById("formStatus");
+
+function setError(fieldId, errorId, message) {
+  const field = document.getElementById(fieldId);
+  const errorEl = document.getElementById(errorId);
+  field.closest(".field").classList.toggle("has-error", Boolean(message));
+  errorEl.textContent = message || "";
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  status.textContent = "";
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  let valid = true;
+
+  if (!name) {
+    setError("name", "nameError", "Please enter your name.");
+    valid = false;
+  } else {
+    setError("name", "nameError", "");
+  }
+
+  if (!email) {
+    setError("email", "emailError", "Please enter your email.");
+    valid = false;
+  } else if (!isValidEmail(email)) {
+    setError("email", "emailError", "That email doesn't look right.");
+    valid = false;
+  } else {
+    setError("email", "emailError", "");
+  }
+
+  if (!message) {
+    setError("message", "messageError", "Please add a short message.");
+    valid = false;
+  } else {
+    setError("message", "messageError", "");
+  }
+
+  if (!valid) {
+    status.textContent = "Please fix the highlighted fields.";
+    status.style.color = "#F2868B";
+    return;
+  }
+
+  // No backend wired up — this is a static demo form.
+  status.style.color = "var(--accent)";
+  status.textContent = `Thanks, ${name.split(" ")[0]}! This is a demo form, so nothing was actually sent — but in a live version, your message would land in my inbox.`;
+  form.reset();
+});
+
+</script>
+</body>
+</html>
